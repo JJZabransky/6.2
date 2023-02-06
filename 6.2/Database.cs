@@ -53,9 +53,24 @@ namespace _6._2
             }
         }
 
-        public IEnumerable<Zamestnanec> Read()
+        public IEnumerable<Zamestnanec> Select()
         {
+            SqlConnection conn = Connection.GetInstance();
 
+            string query = "SELECT * FROM zamestnanec";
+            using(SqlCommand cmd = new SqlCommand(query, conn))
+            {
+                SqlDataReader rd = cmd.ExecuteReader();
+
+                while(rd.Read())
+                {
+                    Zamestnanec z = new Zamestnanec(Convert.ToInt32(rd[0].ToString()), rd[1].ToString(), rd[2].ToString(), Convert.ToInt32(rd[3].ToString()));
+                    yield return z;
+                }
+                rd.Close();
+            }
         }
+
+
     }
 }
